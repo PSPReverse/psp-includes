@@ -34,6 +34,21 @@
 typedef uint64_t X86PADDR;
 #endif
 
+/**
+ * SEV Command buffer structure.
+ */
+typedef struct SEVCMDBUF
+{
+    /** The command identifier. */
+    uint32_t                    idCmd;
+    /** Low part of the X86 physical address of the command buffer. */
+    uint32_t                    PhysX86CmdBufLow;
+    /** High part of the X86 physical address of the command buffer. */
+    uint32_t                    PhysX86CmdBufHigh;
+} SEVCMDBUF;
+/** Pointer to a SEV command buffer structure. */
+typedef SEVCMDBUF *PSEVCMDBUF;
+
 typedef struct SEVREQPLATFORMSTATUS
 {
     uint8_t             u8VerMaj;
