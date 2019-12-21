@@ -18,7 +18,16 @@ typedef int32_t  ssize_t;
 
 typedef uint32_t uintptr_t;
 
+/** A SMN (System Management Network) address. */
+typedef uint32_t SMNADDR;
+/** A virtual PSP memory address. */
+typedef uint32_t PSPADDR;
+/** A x86 physical address. */
 typedef uint64_t X86PADDR;
+#define NIL_X86PADDR (~0ULL)
+
+/** R0 pointer. */
+typedef uint64_t R0PTR;
 
 #define NULL ((void *)0)
 

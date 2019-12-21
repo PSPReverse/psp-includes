@@ -39,31 +39,14 @@
 #define MIN_TO_MSEC(a_min) SEC_TO_MSEC((a_min) * 60)
 #define HOUR_TO_MSEC(a_Hour) MIN_TO_MSEC((a_Hour) * 60)
 
+#define _1K          (1024)
+#define _4K          (4096)
+#define _256K        (256 * _1K)
+#define _1M          (1024 * _1K)
+#define _16M         (16 * _1M)
+#define _32M         (32 * _1M)
+#define _64M         (64 * _1M)
 
-static inline void busy_wait(unsigned int iter) {
-
-  unsigned int i;
-  unsigned int volatile tmp;
-  unsigned int volatile* hdr = (unsigned int*)0x15000;
-
-  for (i = iter; i > 0; i--) {
-    tmp = *hdr;
-    UNUSED(tmp);
-  }
-
-}
-
-static inline void flush_tlb(void) {
-  /* The cortex-A8 has a 32 entry data/instruction TLB
-   * The for loop should access 32 sections to fill the TLB */
-
-  unsigned int i;
-  unsigned int volatile tmp = 0x0;
-
-  for(i = 0; i < 32; i++) {
-    tmp = *((unsigned int* volatile)0x1000000 + i * 0x100000);
-  }
-
-}
+#define PAGE_SIZE    _4K
 
 #endif
