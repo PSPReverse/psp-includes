@@ -26,7 +26,7 @@
 #ifndef __include_sev_h
 #define __include_sev_h
 
-#if defined(IN_PSP)
+#if defined(IN_PSP) || defined(IN_PSP_EMULATOR)
 # include <common/types.h>
 #elif defined(IN_LINUX)
 # include <linux/types.h>

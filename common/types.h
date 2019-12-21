@@ -1,6 +1,7 @@
 #ifndef __include_types_h
 #define __include_types_h
 
+#ifdef IN_PSP
 typedef unsigned char      uint8_t;
 typedef unsigned short     uint16_t;
 typedef unsigned int       uint32_t;
@@ -18,6 +19,9 @@ typedef int32_t  ssize_t;
 
 typedef uint32_t uintptr_t;
 
+#define NULL ((void *)0)
+#endif
+
 /** A SMN (System Management Network) address. */
 typedef uint32_t SMNADDR;
 /** A virtual PSP memory address. */
@@ -28,7 +32,5 @@ typedef uint64_t X86PADDR;
 
 /** R0 pointer. */
 typedef uint64_t R0PTR;
-
-#define NULL ((void *)0)
 
 #endif
