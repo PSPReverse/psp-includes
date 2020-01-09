@@ -20,6 +20,8 @@ typedef int32_t  ssize_t;
 typedef uint32_t uintptr_t;
 
 #define NULL ((void *)0)
+#else
+# include <stdint.h>
 #endif
 
 /** A SMN (System Management Network) address. */
