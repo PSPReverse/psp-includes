@@ -28,6 +28,10 @@
 
 #include <common/cdefs.h>
 
+typedef struct {
+    uint8_t coreComplexId;
+    uint8_t coreId;
+} coreInfo;
 
 /**
  * The boot ROM service page structure as known, residing at 0x3f000.
@@ -47,10 +51,24 @@ typedef union PSPROMSVCPG
         uint8_t                 abAmdPubKey[576];
         /** 0x650-0xa13: Unknown. */
         uint8_t                 abUnknown0[964];
-        /** 0xa14: Boot mode (everything < 2 means signature checks disabled). */
+        /** 0xa14: Boot mode (everything < 2 means signature checks disabled, 2 is 'secure'). */
         uint32_t                u32BootMode;
-        /** 0xa18 - 0xa4f: Unknown. */
-        uint8_t                 abUnknown1[56];
+        /** 0xa18 - 0xa1d: Unknown. */
+        uint8_t                 unknown1[6];
+        /** 0xa1e: physical Core count */
+        uint8_t                 coreCount;
+        /** 0xa1f: physical Core Complex count */
+        uint8_t                 complexCount;
+        /** 0xa20: number of enabled Cores on Die */
+        uint8_t                 enabledCoreCountOnDie;
+        /** 0xa21: unknown */
+        uint8_t                 unknown2;
+        /** 0xa22 - 0xa23: logical Cores per Complex */
+        uint8_t                 logCoresPerComplex[2];
+        /** 0xa24 - 0xa43: coreinfo structs - only seen access to the first 8 so far */
+        struct coreInfo         coreInfoMap[16];
+        /** 0xa44 - 0xa4f: unknown */
+        uint8_t                 abUnknown1[12];
         /** 0xa50: Physical die ID of the PSP. */
         uint8_t                 idPhysDie;
         /** 0xa51: Socket ID. */
