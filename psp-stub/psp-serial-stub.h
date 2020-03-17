@@ -147,7 +147,7 @@ typedef struct PSPSERIALPDUHDR
     union
     {
         /** Byte view (for checksumming). */
-        uint8_t                         ab[12];
+        uint8_t                         ab[28];
         /** Field view. */
         struct
         {
@@ -159,6 +159,10 @@ typedef struct PSPSERIALPDUHDR
             PSPSERIALPDURRNID           enmRrnId;
             /** The CCD the PDU is designated for. */
             uint32_t                    idCcd;
+            /** Status code for a response. */
+            int32_t                     rcReq;
+            /** Millisecond timestamp when a response/notification was sent, ignored for requests. */
+            uint32_t                    tsMillies;
         } Fields;
     } u;
 } PSPSERIALPDUHDR;
@@ -192,7 +196,7 @@ typedef struct PSPSERIALBEACONNOT
     /** Beacon sent counter. */
     uint32_t                            cBeaconsSent;
     /** Padding to 8 byte alignment. */
-    uint32_t                            au32Pad0;
+    uint32_t                            u32Pad0;
 } PSPSERIALBEACONNOT;
 /** Pointer to beacon notification data. */
 typedef PSPSERIALBEACONNOT *PPSPSERIALBEACONNOT;
@@ -272,19 +276,5 @@ typedef struct PSPSERIALX86MEMXFERREQ
 typedef PSPSERIALX86MEMXFERREQ *PPSPSERIALX86MEMXFERREQ;
 /** Pointer to a const PSP memory transfer request. */
 typedef const PSPSERIALX86MEMXFERREQ *PCPSPSERIALX86MEMXFERREQ;
-
-
-/**
- * Any data transfer response.
- */
-typedef struct PSPSERIALPSPXFERRESP
-{
-    /** Status code, on success this is followed by the actual data. */
-    int32_t                             rcReq;
-} PSPSERIALPSPXFERRESP;
-/** Pointer to a PSP data transfer response. */
-typedef PSPSERIALPSPXFERRESP *PPSPSERIALPSPXFERRESP;
-/** Pointer to a const PSP data transfer response. */
-typedef const PSPSERIALPSPXFERRESP *PCPSPSERIALPSPXFERRESP;
 
 #endif /* !__include_psp_serial_stub_h */
