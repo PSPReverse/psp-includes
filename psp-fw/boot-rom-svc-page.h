@@ -43,10 +43,9 @@ typedef union PSPROMSVCPG
     /** Byte view. */
     uint8_t                     ab[_4K];
     /** Structured view. */
-    struct
-    {
+    struct {
         /** 0x00-0x40f: The flash directory structure (@todo Complete). */
-        uint8_t                 abFfsDir[64 * 16 + 16];
+        uint8_t                 abFfsDir[(64 * 16) + 16];
         /** 0x410-0x64f: AMD public key. */
         uint8_t                 abAmdPubKey[576];
         /** 0x650-0xa13: Unknown. */
@@ -81,6 +80,8 @@ typedef union PSPROMSVCPG
         uint8_t                 bUnk0;
         /** 0xa55: Number of dies per socket. */
         uint8_t                 cDiesPerSocket;
+        /** 0xa56 - 0xfff: unknown */
+        uint8_t                 unknown3[1450];
     } Fields;
 } PSPROMSVCPG;
 #pragma pack()
