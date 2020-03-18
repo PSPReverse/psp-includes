@@ -43,7 +43,7 @@ typedef union PSPROMSVCPG
     /** Byte view. */
     uint8_t                     ab[_4K];
     /** Structured view. */
-    struct {
+    struct BRSPFields {
         /** 0x00-0x40f: The flash directory structure (@todo Complete). */
         uint8_t                 abFfsDir[(64 * 16) + 16];
         /** 0x410-0x64f: AMD public key. */
@@ -82,7 +82,7 @@ typedef union PSPROMSVCPG
         uint8_t                 cDiesPerSocket;
         /** 0xa56 - 0xfff: unknown */
         uint8_t                 unknown3[1450];
-    } Fields;
+    };
 } PSPROMSVCPG;
 #pragma pack()
 /** Pointer to a boot ROM service page. */
