@@ -11,7 +11,8 @@
 #define SVC_X86_HOST_MEMORY_COPY_FROM 0x09
 #define SVC_GET_DBG_KEY               0x1f
 #define SVC_X86_HOST_MEMORY_MAP       0x25
-#define SVC_X86_HOST_COPY_FROM_TO_PSP 0x26
+#define SVC_X86_HOST_COPY_TO_PSP      0x26
+#define SVC_X86_HOST_COPY_FROM_PSP    0x27
 #define SVC_SMU_MSG                   0x28
 #define SVC_CALL_OTHER_PSP            0x31
 #define SVC_CACHE_FLUSH               0x37
