@@ -72,6 +72,10 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_NOTIFICATION_IRQ,
     /** Notification: Log message. */
     PSPSERIALPDURRNID_NOTIFICATION_LOG_MSG,
+    /** Notification: Output buffer arbitrary data. */
+    PSPSERIALPDURRNID_NOTIFICATION_OUT_BUF,
+    /** Notification: Code module execution has finished. */
+    PSPSERIALPDURRNID_NOTIFICATION_CODE_MOD_EXEC_FINISHED,
     /** Notification: First invalid notification ID. */
     PSPSERIALPDURRNID_NOTIFICATION_INVALID_FIRST,
 
@@ -99,6 +103,12 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_REQUEST_PSP_X86_MMIO_READ,
     /** Request: Write x86 MMIO. */
     PSPSERIALPDURRNID_REQUEST_PSP_X86_MMIO_WRITE,
+    /** Request: Write input buffer. */
+    PSPSERIALPDURRNID_REQUEST_INPUT_BUF_WRITE,
+    /** Request: Load code module. */
+    PSPSERIALPDURRNID_REQUEST_LOAD_CODE_MOD,
+    /** Request: Execute code module. */
+    PSPSERIALPDURRNID_REQUEST_EXEC_CODE_MOD,
     /** Request: First invalid request ID. */
     PSPSERIALPDURRNID_REQUEST_INVALID_FIRST,
 
@@ -126,6 +136,12 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_RESPONSE_PSP_X86_MMIO_READ,
     /** Response: Write x86 MMIO. */
     PSPSERIALPDURRNID_RESPONSE_PSP_X86_MMIO_WRITE,
+    /** Response: Write input buffer. */
+    PSPSERIALPDURRNID_RESPONSE_INPUT_BUF_WRITE,
+    /** Response: Load code module. */
+    PSPSERIALPDURRNID_RESPONSE_LOAD_CODE_MOD,
+    /** Response: Load code module. */
+    PSPSERIALPDURRNID_RESPONSE_EXEC_CODE_MOD,
     /** Response: First invalid response ID. */
     PSPSERIALPDURRNID_RESPONSE_INVALID_FIRST,
 
@@ -134,6 +150,20 @@ typedef enum PSPSERIALPDURRNID
 } PSPSERIALPDURRNID;
 /** Pointer to the Request/Response/Notification ID. */
 typedef PSPSERIALPDURRNID *PPSPSERIALPDURRNID;
+
+
+/**
+ * Code module type.
+ */
+typedef enum PSPSERIALCMTYPE
+{
+    /** Invalid type. */
+    PSPSERIALCMTYPE_INVALID = 0,
+    /** Flat binary loaded at a fixed address determined by the serial stub. */
+    PSPSERIALCMTYPE_FLAT_BINARY,
+    /** @todo ELF. */
+    PSPSERIALCMTYPE_32BIT_HACK = 0x7fffffff
+} PSPSERIALCMTYPE;
 
 
 /**
@@ -154,7 +184,7 @@ typedef struct PSPSERIALPDUHDR
             /** Size of the PDU in bytes, excluding the header and footer. */
             uint32_t                    cbPdu;
             /** PDU counter (monotonically incrementing for each direction). */
-            uint64_t                    cPdus;
+            uint32_t                    cPdus;
             /** Request/Response/Notification ID. */
             PSPSERIALPDURRNID           enmRrnId;
             /** The CCD the PDU is designated for. */
@@ -163,6 +193,8 @@ typedef struct PSPSERIALPDUHDR
             int32_t                     rcReq;
             /** Millisecond timestamp when a response/notification was sent, ignored for requests. */
             uint32_t                    tsMillies;
+            /** Padding to 32 bytes. */
+            uint32_t                    u32Pad0;
         } Fields;
     } u;
 } PSPSERIALPDUHDR;
@@ -170,6 +202,10 @@ typedef struct PSPSERIALPDUHDR
 typedef PSPSERIALPDUHDR *PPSPSERIALPDUHDR;
 /** Pointer to a const PSP serial PDU header. */
 typedef const PSPSERIALPDUHDR *PCPSPSERIALPDUHDR;
+
+#ifdef __GNUC__
+_Static_assert(sizeof(PSPSERIALPDUHDR) == 32, "PDU header has invalid size!");
+#endif
 
 
 /**
@@ -202,6 +238,38 @@ typedef struct PSPSERIALBEACONNOT
 typedef PSPSERIALBEACONNOT *PPSPSERIALBEACONNOT;
 /** Pointer to a const beacon notification. */
 typedef const PSPSERIALBEACONNOT *PCPSPSERIALBEACONNOT;
+
+
+/**
+ * PSP serial stub output buffer notification data.
+ */
+typedef struct PSPSERIALOUTBUFNOT
+{
+    /** Output buffer identifer. */
+    uint32_t                            idOutBuf;
+    /** Padding to 8 byte alignment. */
+    uint32_t                            u32Pad0;
+} PSPSERIALOUTBUFNOT;
+/** Pointer to beacon notification data. */
+typedef PSPSERIALOUTBUFNOT *PPSPSERIALOUTBUFNOT;
+/** Pointer to a const beacon notification. */
+typedef const PSPSERIALOUTBUFNOT *PCPSPSERIALOUTBUFNOT;
+
+
+/**
+ * PSP serial stub code module execution done notification data.
+ */
+typedef struct PSPSERIALEXECCMFINISHEDNOT
+{
+    /** Arbitrary code module return value. */
+    uint32_t                            u32CmRet;
+    /** Padding to 8 byte alignment. */
+    uint32_t                            u32Pad0;
+} PSPSERIALEXECCMFINISHEDNOT;
+/** Pointer to beacon notification data. */
+typedef PSPSERIALEXECCMFINISHEDNOT *PPSPSERIALEXECCMFINISHEDNOT;
+/** Pointer to a const beacon notification. */
+typedef const PSPSERIALEXECCMFINISHEDNOT *PCPSPSERIALEXECCMFINISHEDNOT;
 
 
 /**
@@ -276,5 +344,58 @@ typedef struct PSPSERIALX86MEMXFERREQ
 typedef PSPSERIALX86MEMXFERREQ *PPSPSERIALX86MEMXFERREQ;
 /** Pointer to a const PSP memory transfer request. */
 typedef const PSPSERIALX86MEMXFERREQ *PCPSPSERIALX86MEMXFERREQ;
+
+
+/**
+ * PSP serial stub write input buffer request data.
+ */
+typedef struct PSPSERIALINBUFWRREQ
+{
+    /** Input buffer identifer. */
+    uint32_t                            idInBuf;
+    /** Padding to 8 byte alignment. */
+    uint32_t                            u32Pad0;
+} PSPSERIALINBUFWRREQ;
+/** Pointer to write input buffer request data. */
+typedef PSPSERIALINBUFWRREQ *PPSPSERIALINBUFWRREQ;
+/** Pointer to a const write input buffer request. */
+typedef const PSPSERIALINBUFWRREQ *PCPSPSERIALINBUFWRREQ;
+
+
+/**
+ * PSP serial stub load code module request data.
+ */
+typedef struct PSPSERIALLOADCODEMODREQ
+{
+    /** Code module type. */
+    PSPSERIALCMTYPE                     enmCmType;
+    /** Padding to 8 byte alignment. */
+    uint32_t                            u32Pad0;
+} PSPSERIALLOADCODEMODREQ;
+/** Pointer to load code module request data. */
+typedef PSPSERIALLOADCODEMODREQ *PPSPSERIALLOADCODEMODREQ;
+/** Pointer to a const load code module request. */
+typedef const PSPSERIALLOADCODEMODREQ *PCPSPSERIALLOADCODEMODREQ;
+
+
+/**
+ * PSP serial stub exec code module request data.
+ */
+typedef struct PSPSERIALEXECCODEMODREQ
+{
+    /** Arbitrary argument 0 value. */
+    uint32_t                            u32Arg0;
+    /** Arbitrary argument 1 value. */
+    uint32_t                            u32Arg1;
+    /** Arbitrary argument 2 value. */
+    uint32_t                            u32Arg2;
+    /** Arbitrary argument 3 value. */
+    uint32_t                            u32Arg3;
+} PSPSERIALEXECCODEMODREQ;
+/** Pointer to load code module request data. */
+typedef PSPSERIALEXECCODEMODREQ *PPSPSERIALEXECCODEMODREQ;
+/** Pointer to a const load code module request. */
+typedef const PSPSERIALEXECCODEMODREQ *PCPSPSERIALEXECCODEMODREQ;
+
 
 #endif /* !__include_psp_serial_stub_h */
