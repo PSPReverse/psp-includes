@@ -181,7 +181,8 @@ typedef struct PSPSERIALPDUHDR
         /** Field view. */
         struct
         {
-            /** Size of the PDU in bytes, excluding the header and footer. */
+            /** Size of the PDU in bytes, excluding the header and footer,
+             * pad to the next 8 byte alignment to know where the footer starts. */
             uint32_t                    cbPdu;
             /** PDU counter (monotonically incrementing for each direction). */
             uint32_t                    cPdus;
