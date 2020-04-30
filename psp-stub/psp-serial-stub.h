@@ -28,6 +28,7 @@
 
 #if defined(IN_PSP) || defined(IN_PSP_EMULATOR)
 # include <common/types.h>
+# include <common/cdefs.h>
 #else
 # error "Invalid environment"
 #endif
@@ -103,6 +104,8 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_REQUEST_PSP_X86_MMIO_READ,
     /** Request: Write x86 MMIO. */
     PSPSERIALPDURRNID_REQUEST_PSP_X86_MMIO_WRITE,
+    /** Request: Generic data transfer request (more capable but has more overhead). */
+    PSPSERIALPDURRNID_REQUEST_PSP_DATA_XFER,
     /** Request: Write input buffer. */
     PSPSERIALPDURRNID_REQUEST_INPUT_BUF_WRITE,
     /** Request: Load code module. */
@@ -136,6 +139,8 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_RESPONSE_PSP_X86_MMIO_READ,
     /** Response: Write x86 MMIO. */
     PSPSERIALPDURRNID_RESPONSE_PSP_X86_MMIO_WRITE,
+    /** Response: Generic data transfer request (more capable but has more overhead). */
+    PSPSERIALPDURRNID_RESPONSE_PSP_DATA_XFER,
     /** Response: Write input buffer. */
     PSPSERIALPDURRNID_RESPONSE_INPUT_BUF_WRITE,
     /** Response: Load code module. */
@@ -164,6 +169,28 @@ typedef enum PSPSERIALCMTYPE
     /** @todo ELF. */
     PSPSERIALCMTYPE_32BIT_HACK = 0x7fffffff
 } PSPSERIALCMTYPE;
+
+
+/**
+ * PSP address space.
+ */
+typedef enum PSPADDRSPACE
+{
+    /** Invalid address space. */
+    PSPADDRSPACE_INVALID = 0,
+    /** PSP SRAM. */
+    PSPADDRSPACE_PSP_MEM,
+    /** PSP MMIO. */
+    PSPADDRSPACE_PSP_MMIO,
+    /** SMN. */
+    PSPADDRSPACE_SMN,
+    /** x86 standard memory. */
+    PSPADDRSPACE_X86_MEM,
+    /** x86 MMIO. */
+    PSPADDRSPACE_X86_MMIO,
+    /** 32bit hack. */
+    PSPADDRSPACE_32BIT_HACK = 0x7fffffff
+} PSPADDRSPACE;
 
 
 /**
@@ -398,5 +425,55 @@ typedef PSPSERIALEXECCODEMODREQ *PPSPSERIALEXECCODEMODREQ;
 /** Pointer to a const load code module request. */
 typedef const PSPSERIALEXECCODEMODREQ *PCPSPSERIALEXECCODEMODREQ;
 
+
+/**
+ * Generic data transfer request.
+ */
+typedef struct PSPSERIALDATAXFERREQ
+{
+    /** The PSP address space identifier. */
+    PSPADDRSPACE                        enmAddrSpace;
+    /** The access stride (1, 2 or 4 bytes). */
+    uint32_t                            cbStride;
+    /** Size of the transfer in bytes (must be multiple of access stride). */
+    uint32_t                            cbXfer;
+    /** Transfer flags. */
+    uint32_t                            fFlags;
+    /** The address space dependent start address of the transfer. */
+    union
+    {
+        /** PSP address for both SRAM and MMIO transfers. */
+        PSPADDR                         PspAddrStart;
+        /** SMN address. */
+        SMNADDR                         SmnAddrStart;
+        /** x86 dependent data. */
+        struct
+        {
+            /** X86 physical address. */
+            X86PADDR                    PhysX86AddrStart;
+            /** Caching flags used for the access. */
+            uint32_t                    fCaching;
+            /** Padding to 8 byte alignment. */
+            uint32_t                    u32Pad0;
+        } X86;
+    } u;
+} PSPSERIALDATAXFERREQ;
+/** Pointer to a PSP memory transfer request. */
+typedef PSPSERIALDATAXFERREQ *PPSPSERIALDATAXFERREQ;
+/** Pointer to a const PSP memory transfer request. */
+typedef const PSPSERIALDATAXFERREQ *PCPSPSERIALDATAXFERREQ;
+
+#ifdef __GNUC__
+_Static_assert(sizeof(PSPSERIALDATAXFERREQ) == 32, "Memory transfer descriptor has invalid size!");
+#endif
+
+/** Read from the target address. */
+#define PSP_SERIAL_DATA_XFER_F_READ      BIT(0)
+/** Write to the target address. */
+#define PSP_SERIAL_DATA_XFER_F_WRITE     BIT(1)
+/** This is a memset like operation and the PDU only contains a single datum with the stride size. */
+#define PSP_SERIAL_DATA_XFER_F_MEMSET    BIT(2)
+/** Increment PSP address after each access by the stride. */
+#define PSP_SERIAL_DATA_XFER_F_INCR_ADDR BIT(3)
 
 #endif /* !__include_psp_serial_stub_h */
