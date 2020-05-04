@@ -32,8 +32,12 @@ typedef uint8_t bool;
 
 /** A SMN (System Management Network) address. */
 typedef uint32_t SMNADDR;
-/** A virtual PSP memory address. */
+/** A generic PSP memory address, avoid in new code whenever possible. */
 typedef uint32_t PSPADDR;
+/** A virtual PSP memory address. */
+typedef uint32_t PSPVADDR;
+/** A physical PSP memory address. */
+typedef uint32_t PSPPADDR;
 /** A x86 physical address. */
 typedef uint64_t X86PADDR;
 #define NIL_X86PADDR (~0ULL)
