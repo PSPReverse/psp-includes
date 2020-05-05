@@ -106,6 +106,10 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_REQUEST_PSP_X86_MMIO_WRITE,
     /** Request: Generic data transfer request (more capable but has more overhead). */
     PSPSERIALPDURRNID_REQUEST_PSP_DATA_XFER,
+    /** Request: Read a Co processor register. */
+    PSPSERIALPDURRNID_REQUEST_COPROC_READ,
+    /** Request: Write a Co processor register. */
+    PSPSERIALPDURRNID_REQUEST_COPROC_WRITE,
     /** Request: Write input buffer. */
     PSPSERIALPDURRNID_REQUEST_INPUT_BUF_WRITE,
     /** Request: Load code module. */
@@ -141,6 +145,10 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_RESPONSE_PSP_X86_MMIO_WRITE,
     /** Response: Generic data transfer request (more capable but has more overhead). */
     PSPSERIALPDURRNID_RESPONSE_PSP_DATA_XFER,
+    /** Response: Read a Co processor register. */
+    PSPSERIALPDURRNID_RESPONSE_COPROC_READ,
+    /** Response: Write a Co processor register. */
+    PSPSERIALPDURRNID_RESPONSE_COPROC_WRITE,
     /** Response: Write input buffer. */
     PSPSERIALPDURRNID_RESPONSE_INPUT_BUF_WRITE,
     /** Response: Load code module. */
@@ -475,5 +483,34 @@ _Static_assert(sizeof(PSPSERIALDATAXFERREQ) == 32, "Memory transfer descriptor h
 #define PSP_SERIAL_DATA_XFER_F_MEMSET    BIT(2)
 /** Increment PSP address after each access by the stride. */
 #define PSP_SERIAL_DATA_XFER_F_INCR_ADDR BIT(3)
+
+
+/**
+ * Co-Processor read/write request information.
+ */
+typedef struct PSPSERIALCOPROCRWREQ
+{
+    /** The Co-processor to access. */
+    uint8_t                             u8CoProc;
+    /** The CRn value which will be encoded in the instruction. */
+    uint8_t                             u8Crn;
+    /** The CRm value which will be encoded in the instruction. */
+    uint8_t                             u8Crm;
+    /** The opc1 value which will be encoded in the instruction. */
+    uint8_t                             u8Opc1;
+    /** The opc2 value which will be encoded in the instruction. */
+    uint8_t                             u8Opc2;
+    /** Padding to 8 byte boundary. */
+    uint8_t                             abPad[3];
+} PSPSERIALCOPROCRWREQ;
+/** Pointer to a Co-Processor read/write request. */
+typedef PSPSERIALCOPROCRWREQ *PPSPSERIALCOPROCRWREQ;
+/** Pointer to a const Co-Processor read/write request. */
+typedef const PSPSERIALCOPROCRWREQ *PCPSPSERIALCOPROCRWREQ;
+
+#ifdef __GNUC__
+_Static_assert(sizeof(PSPSERIALCOPROCRWREQ) == 8, "Co-Processor RW request descriptor has invalid size!");
+#endif
+
 
 #endif /* !__include_psp_serial_stub_h */
