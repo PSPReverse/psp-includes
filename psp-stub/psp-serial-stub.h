@@ -52,8 +52,14 @@
 #define PSP_SERIAL_STS_INF_SUCCESS                      (0)
 /** Invalid parameter. */
 #define PSP_SERIAL_STS_ERR_INVALID_PARAMETER            (-1)
-/** Buffer voerflow. */
+/** Buffer overflow. */
 #define PSP_SERIAL_STS_ERR_BUFFER_OVERFLOW              (-2)
+/** Request caused undefined instruction exception. */
+#define PSP_SERIAL_STS_UNDEF_INSN_EXCEPTION             (-3)
+/** Request caused data abort exception. */
+#define PSP_SERIAL_STS_DATA_ABORT_EXCEPTION             (-4)
+/** Request caused prefetch abort exception. */
+#define PSP_SERIAL_STS_PREFETCH_ABORT_EXCEPTION         (-5)
 /** @} */
 
 
