@@ -122,6 +122,8 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_REQUEST_LOAD_CODE_MOD,
     /** Request: Execute code module. */
     PSPSERIALPDURRNID_REQUEST_EXEC_CODE_MOD,
+    /** Request: Branch to address (this will likely kill the stub). */
+    PSPSERIALPDURRNID_REQUEST_BRANCH_TO,
     /** Request: First invalid request ID. */
     PSPSERIALPDURRNID_REQUEST_INVALID_FIRST,
 
@@ -161,6 +163,8 @@ typedef enum PSPSERIALPDURRNID
     PSPSERIALPDURRNID_RESPONSE_LOAD_CODE_MOD,
     /** Response: Load code module. */
     PSPSERIALPDURRNID_RESPONSE_EXEC_CODE_MOD,
+    /** Response: Branch to address (response is send before the actual branch). */
+    PSPSERIALPDURRNID_RESPONSE_BRANCH_TO,
     /** Response: First invalid response ID. */
     PSPSERIALPDURRNID_RESPONSE_INVALID_FIRST,
 
@@ -518,5 +522,31 @@ typedef const PSPSERIALCOPROCRWREQ *PCPSPSERIALCOPROCRWREQ;
 _Static_assert(sizeof(PSPSERIALCOPROCRWREQ) == 8, "Co-Processor RW request descriptor has invalid size!");
 #endif
 
+
+/**
+ * Branch to request information.
+ */
+typedef struct PSPSERIALBRANCHTOREQ
+{
+    /** Flags determining the branch behavior. */
+    uint32_t                            u32Flags;
+    /** The address to branch to. */
+    PSPADDR                             PspAddrDst;
+    /** Value of the general purpose registers. */
+    uint32_t                            au32Gprs[13];
+    /** Padding. */
+    uint32_t                            u32Pad0;
+} PSPSERIALBRANCHTOREQ;
+/** Pointer to a Co-Processor read/write request. */
+typedef PSPSERIALBRANCHTOREQ *PPSPSERIALBRANCHTOREQ;
+/** Pointer to a const Co-Processor read/write request. */
+typedef const PSPSERIALBRANCHTOREQ *PCPSPSERIALBRANCHTOREQ;
+
+#ifdef __GNUC__
+_Static_assert(sizeof(PSPSERIALBRANCHTOREQ) == 16 * sizeof(uint32_t), "Branch to descriptor has invalid size!");
+#endif
+
+/** The code branched to uses the thumb instruction set, if clear it uses the default ARM ISA. */
+#define PSP_SERIAL_BRANCH_TO_F_THUMB    BIT(0)
 
 #endif /* !__include_psp_serial_stub_h */
