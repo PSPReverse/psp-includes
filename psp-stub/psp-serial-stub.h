@@ -232,7 +232,7 @@ typedef struct PSPSERIALPDUHDR
             /** The CCD the PDU is designated for. */
             uint32_t                    idCcd;
             /** Status code for a response. */
-            int32_t                     rcReq;
+            PSPSTS                      rcReq;
             /** Millisecond timestamp when a response/notification was sent, ignored for requests. */
             uint32_t                    tsMillies;
             /** Padding to 32 bytes. */

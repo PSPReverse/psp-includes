@@ -30,6 +30,8 @@ typedef uint8_t bool;
 # include <stdbool.h>
 #endif
 
+/** PSP status code. */
+typedef PSPSTS   int32_t;
 /** A SMN (System Management Network) address. */
 typedef uint32_t SMNADDR;
 /** A generic PSP memory address, avoid in new code whenever possible. */
