@@ -67,6 +67,10 @@
 #define STS_ERR_PSP_PROXY_TIMEOUT                           (-2000)
 /** A request caused a PSP reset. */
 #define STS_ERR_PSP_PROXY_RESET                             (-2001)
+/** Request completed with an error. */
+#define STS_ERR_PSP_PROXY_REQ_COMPLETED_WITH_ERROR          (-2002)
+/** Request returned unexpected PDU payload size. */
+#define STS_ERR_PSP_PROXY_REQ_RESP_PAYLOAD_SZ_MISMATCH      (-2003)
 /** @} */
 
 
