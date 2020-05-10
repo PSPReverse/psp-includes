@@ -42,6 +42,14 @@
 #define STS_ERR_INVALID_PARAMETER                           (-2)
 /** The operation/parameters would cause a buffer overflow. */
 #define STS_ERR_BUFFER_OVERFLOW                             (-3)
+/** Something wasn't found. */
+#define STS_ERR_NOT_FOUND                                   (-4)
+/** Out of memory situation occurred. */
+#define STS_ERR_NO_MEMORY                                   (-5)
+/** An operation would block and no blocking behavior was requested. */
+#define STS_ERR_TRY_AGAIN                                   (-6)
+/** An operation would block and no blocking behavior was requested. */
+#define STS_INF_TRY_AGAIN                                   (6)
 
 
 /*
@@ -77,7 +85,7 @@
 /** @name Status codes specific for PSPEmu.
  * @{ */
 /** The emulation core encountered a WFI instruction. */
-#define STS_INF_PSP_EMU_CORE_INSN_WFI_REACHED               (-3000)
+#define STS_INF_PSP_EMU_CORE_INSN_WFI_REACHED               (3000)
 /** @} */
 
 #endif /* !INCLUDED_common_status_h */
