@@ -190,28 +190,6 @@ typedef enum PSPSERIALCMTYPE
 
 
 /**
- * PSP address space.
- */
-typedef enum PSPADDRSPACE
-{
-    /** Invalid address space. */
-    PSPADDRSPACE_INVALID = 0,
-    /** PSP SRAM. */
-    PSPADDRSPACE_PSP_MEM,
-    /** PSP MMIO. */
-    PSPADDRSPACE_PSP_MMIO,
-    /** SMN. */
-    PSPADDRSPACE_SMN,
-    /** x86 standard memory. */
-    PSPADDRSPACE_X86_MEM,
-    /** x86 MMIO. */
-    PSPADDRSPACE_X86_MMIO,
-    /** 32bit hack. */
-    PSPADDRSPACE_32BIT_HACK = 0x7fffffff
-} PSPADDRSPACE;
-
-
-/**
  * PDU header common for both directions.
  */
 typedef struct PSPSERIALPDUHDR
