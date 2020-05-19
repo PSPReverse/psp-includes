@@ -287,6 +287,29 @@ typedef const PSPSERIALBEACONNOT *PCPSPSERIALBEACONNOT;
 
 
 /**
+ * PSP serial stub interrupt status change notification.
+ */
+typedef struct PSPSERIALIRQNOT
+{
+    /** Current interrupt status flags. */
+    uint16_t                            fIrqCur;
+    /** Previous interrupt status flags. */
+    uint16_t                            fIrqPrev;
+    /** Padding to 8 byte alignment. */
+    uint32_t                            u32Pad0;
+} PSPSERIALIRQNOT;
+/** Pointer to beacon notification data. */
+typedef PSPSERIALIRQNOT *PPSPSERIALIRQNOT;
+/** Pointer to a const beacon notification. */
+typedef const PSPSERIALIRQNOT *PCPSPSERIALIRQNOT;
+
+/** IRQ is pending flag. */
+#define PSP_SERIAL_NOTIFICATION_IRQ_PENDING_IRQ     BIT(0)
+/** FIQ is pending flag. */
+#define PSP_SERIAL_NOTIFICATION_IRQ_PENDING_FIQ     BIT(1)
+
+
+/**
  * PSP serial stub output buffer notification data.
  */
 typedef struct PSPSERIALOUTBUFNOT
