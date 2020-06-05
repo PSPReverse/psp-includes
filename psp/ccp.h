@@ -158,20 +158,20 @@
 
 /** @name ECC engine specific defines.
  * @{ */
-/** Product of two elements in a F_p field. */
+/** Multiply two elements in a F_p field. */
 #define CCP_V5_ENGINE_ECC_OP_MUL_FIELD              0
-/** Sum of two elements in a F_p field. */
+/** Add two elements in a F_p field. */
 #define CCP_V5_ENGINE_ECC_OP_ADD_FIELD              1
-/** Multiplicative inverse of an element in a F_p field. */
+/** Invert (multiplicative) an element in a F_p field. */
 #define CCP_V5_ENGINE_ECC_OP_INV_FIELD              2
-/** First unknown ECC engine operation. */
-#define CCP_V5_ENGINE_ECC_OP_UNKNOWN_1              3
-/** Integer multiple of a point on an elliptic curve. */
+/** Maybe add two points on an elliptic curve? */
+#define CCP_V5_ENGINE_ECC_OP_ADD_CURVE              3
+/** Mutiply a point on an elliptic curve with an element in a F_p field. */
 #define CCP_V5_ENGINE_ECC_OP_MUL_CURVE              4
-/** First unknown ECC engine operation. */
-#define CCP_V5_ENGINE_ECC_OP_UNKNOWN_2              5
-/** Sum of the integer multiples of two points on an elliptic curve. */
-#define CCP_V5_ENGINE_ECC_OP_ADD_CURVE              6
+/** Maybe double a point on an elliptic curve? */
+#define CCP_V5_ENGINE_ECC_OP_DOUBLE_CURVE           5
+/** Add multiples of two points on an elliptic curve. */
+#define CCP_V5_ENGINE_ECC_OP_MUL_ADD_CURVE          6
 /** Magic value in an ECC engine request. */
 #define CCP_V5_ENGINE_ECC_MAGIC_VALUE               0x20
 /** Returns the ECC op. */
