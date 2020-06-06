@@ -176,8 +176,8 @@
 #define CCP_V5_ENGINE_ECC_MAGIC_VALUE               0x180
 /** Returns the ECC op. */
 #define CCP_V5_ENGINE_ECC_OP_GET(a_Func)            ((a_Func >> 12) & 0x7)
-/** Returns a magic value in an ECC engine requests function field. */
-#define CCP_V5_ENGINE_ECC_MAGIC_VALUE_GET(a_Func)   (a_Func & 0xfff)
+/** Returns the lowest exponent such that a power of two is larger then the fields prime. */
+#define CCP_V5_ENGINE_ECC_BIT_COUNT_GET(a_Func)     (a_Func & 0xfff)
 /** @} */
 
 /** @name Available memory types.
