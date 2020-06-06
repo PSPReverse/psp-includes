@@ -173,7 +173,7 @@
 /** Add multiples of two points on an elliptic curve. */
 #define CCP_V5_ENGINE_ECC_OP_MUL_ADD_CURVE          6
 /** Magic value in an ECC engine request. */
-#define CCP_V5_ENGINE_ECC_MAGIC_VALUE               0x20
+#define CCP_V5_ENGINE_ECC_MAGIC_VALUE               0x180
 /** Returns the ECC op. */
 #define CCP_V5_ENGINE_ECC_OP_GET(a_Func)            ((a_Func >> 12) & 0x7)
 /** Returns a magic value in an ECC engine requests function field. */
