@@ -328,7 +328,7 @@ typedef CCP5REQ *PCCP5REQ;
 typedef const CCP5REQ *PCCCP5REQ;
 
 /** ECC request number. */
-typedef struct CCP5ECC_NUMBER { uint8_t bytes[0x48]; } CCP5ECC_NUM;
+typedef struct CCP5ECC_NUMBER { uint8_t bytes[0x48]; } CCP5ECC_NUMBER;
 /** ECC request point. */
 typedef struct CCP5ECC_POINT { CCP5ECC_NUMBER x, y; } CCP5ECC_POINT;
 
