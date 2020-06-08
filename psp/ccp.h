@@ -172,8 +172,6 @@
 #define CCP_V5_ENGINE_ECC_OP_DOUBLE_CURVE           5
 /** Add multiples of two points on an elliptic curve. */
 #define CCP_V5_ENGINE_ECC_OP_MUL_ADD_CURVE          6
-/** Magic value in an ECC engine request. */
-#define CCP_V5_ENGINE_ECC_MAGIC_VALUE               0x180
 /** Returns the ECC op. */
 #define CCP_V5_ENGINE_ECC_OP_GET(a_Func)            ((a_Func >> 12) & 0x7)
 /** Returns the lowest exponent such that a power of two is larger then the fields prime. */
