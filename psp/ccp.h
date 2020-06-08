@@ -369,8 +369,14 @@ typedef struct CCP5ECC_DATA {
             CCP5ECC_POINT   Point;
             /** Unused number (set to zero). */
             CCP5ECC_NUMBER  Zero;
-            /** Curve coefficient b (a is -3). */
-            CCP5ECC_NUMBER  CoefficientB;
+            /**
+             * Curve coefficient a.
+             * @todo Why? And what do we do with this?
+             *       You either need both coefficients
+             *       (a and b) or only b when a is assumed
+             *       to be -3.
+             */
+            CCP5ECC_NUMBER  Coefficient;
             /** Factor by which to mutiply point. */
             CCP5ECC_NUMBER  Factor;
         } CurveMultiplication;
@@ -388,8 +394,14 @@ typedef struct CCP5ECC_DATA {
             CCP5ECC_POINT   Point2;
             /** Factor by which to scale second summand. */
             CCP5ECC_NUMBER  Factor2;
-            /** Curve coefficient b (a is -3). */
-            CCP5ECC_NUMBER  CoefficientB;
+            /**
+             * Curve coefficient a.
+             * @todo Why? And what do we do with this?
+             *       You either need both coefficients
+             *       (a and b) or only b when a is assumed
+             *       to be -3.
+             */
+            CCP5ECC_NUMBER  Coefficient;
         } CurveMultiplicationAddition;
     } Op;
 } CCP5ECC_DATA;
