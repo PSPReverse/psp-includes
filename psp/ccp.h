@@ -366,7 +366,7 @@ typedef struct CCP5ECC_DATA {
         /** Data for curve multiplication. */
         struct {
             /** Point on curve to be multiplied. */
-            CPP5ECC_POINT   Point;
+            CCP5ECC_POINT   Point;
             /** Unused number (set to zero). */
             CCP5ECC_NUMBER  Zero;
             /** Curve coefficient b (a is -3). */
@@ -381,11 +381,11 @@ typedef struct CCP5ECC_DATA {
         /** Data for curve addition and multiplication. */
         struct {
             /** First summand on curve to be scaled. */
-            CPP5ECC_POINT   Point1;
+            CCP5ECC_POINT   Point1;
             /** Factor by which to scale first summand. */
             CCP5ECC_NUMBER  Factor1;
             /** Second summand on curve to be scaled. */
-            CPP5ECC_POINT   Point2;
+            CCP5ECC_POINT   Point2;
             /** Factor by which to scale second summand. */
             CCP5ECC_NUMBER  Factor2;
             /** Curve coefficient b (a is -3). */
