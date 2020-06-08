@@ -327,5 +327,72 @@ typedef CCP5REQ *PCCP5REQ;
 /** Pointer to a const request descriptor. */
 typedef const CCP5REQ *PCCCP5REQ;
 
+/** ECC request number. */
+typedef struct CCP5ECC_NUMBER { uint8_t bytes[0x48]; } CCP5ECC_NUM;
+/** ECC request point. */
+typedef struct CCP5ECC_POINT { CCP5ECC_NUMBER x, y; } CCP5ECC_POINT;
+
+/**
+ * ECC request data.
+ */
+typedef struct CCP5ECC_DATA {
+    /** Prime-Modulus for the field on which the curve is defined. */
+    CCP5ECC_NUMBER          Prime;
+    /** ECC operation dependent data. */
+    union {
+        /** Data for multiplication in a field. */
+        struct {
+            /** First factor to be multiplied. */
+            CCP5ECC_NUMBER  Factor1;
+            /** Second factor to be multiplied. */
+            CCP5ECC_NUMBER  Factor2;
+        } FieldMultiplication;
+        /** Data for addition in a field. */
+        struct {
+            /** First summand to be added. */
+            CCP5ECC_NUMBER  Summand1;
+            /** Second summand to be added. */
+            CCP5ECC_NUMBER  Summand2;
+        } FieldAddition;
+        /** Data for inversion in a field. */
+        struct {
+            /** Number to be inverted. */
+            CCP5ECC_NUMBER  Number;
+        } FieldInversion;
+        /** @todo Data for curve addition (layout unknown). */
+        struct {
+            /* unknown */
+        } CurveAddition;
+        /** Data for curve multiplication. */
+        struct {
+            /** Point on curve to be multiplied. */
+            CPP5ECC_POINT   Point;
+            /** Unused number (set to zero). */
+            CCP5ECC_NUMBER  Zero;
+            /** Curve coefficient b (a is -3). */
+            CCP5ECC_NUMBER  CoefficientB;
+            /** Factor by which to mutiply point. */
+            CCP5ECC_NUMBER  Factor;
+        } CurveMultiplication;
+        /** @todo Data for curve doubling (layout unknown). */
+        struct {
+            /* unknown */
+        } CurveDoubling;
+        /** Data for curve addition and multiplication. */
+        struct {
+            /** First summand on curve to be scaled. */
+            CPP5ECC_POINT   Point1;
+            /** Factor by which to scale first summand. */
+            CCP5ECC_NUMBER  Factor1;
+            /** Second summand on curve to be scaled. */
+            CPP5ECC_POINT   Point2;
+            /** Factor by which to scale second summand. */
+            CCP5ECC_NUMBER  Factor2;
+            /** Curve coefficient b (a is -3). */
+            CCP5ECC_NUMBER  CoefficientB;
+        } CurveMultiplicationAddition;
+    } Op;
+} CCP5ECC_DATA;
+
 #endif /* !INCLUDED_psp_ccp_h */
 
