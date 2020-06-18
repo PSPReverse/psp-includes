@@ -327,48 +327,81 @@ typedef CCP5REQ *PCCP5REQ;
 /** Pointer to a const request descriptor. */
 typedef const CCP5REQ *PCCCP5REQ;
 
-/** ECC request number. */
-typedef struct CCP5ECC_NUMBER { uint8_t bytes[0x48]; } CCP5ECC_NUMBER;
-/** ECC request point. */
-typedef struct CCP5ECC_POINT { CCP5ECC_NUMBER x; CCP5ECC_NUMBER y; } CCP5ECC_POINT;
+
+/**
+ * ECC request number representation.
+ */
+typedef struct CCP5ECCNUM
+{
+    /** The number as a byte array. */
+    uint8_t                         abNum[0x48];
+} CCP5ECCNUM;
+/** Pointer to a ECC number. */
+typedef CCP5ECCNUM *PCCP5ECCNUM;
+/** Pointer to a const ECC number. */
+typedef const CCP5ECCNUM *PCCCP5ECCNUM;
+
+
+/**
+ * ECC request point representation.
+ */
+typedef struct CCP5ECCPT
+{
+    /** The X coordinate. */
+    CCP5ECCNUM                      X;
+    /** The Y coordinate. */
+    CCP5ECCNUM                      Y;
+} CCP5ECCPT;
+/** Pointer to a ECC point. */
+typedef CCP5ECCPT *PCCP5ECCPT;
+/** Pointer to a const ECC point. */
+typedef const CCP5ECCPT *PCCCP5ECCPT;
+
 
 /**
  * ECC request data.
  */
-typedef struct CCP5ECC_DATA {
+typedef struct CCP5ECCREQ
+{
     /** Prime-Modulus for the field on which the curve is defined. */
-    CCP5ECC_NUMBER          Prime;
+    CCP5ECCNUM                      Prime;
     /** ECC operation dependent data. */
-    union {
+    union
+    {
         /** Data for multiplication in a field. */
-        struct {
+        struct
+        {
             /** First factor to be multiplied. */
-            CCP5ECC_NUMBER  Factor1;
+            CCP5ECCNUM              Factor1;
             /** Second factor to be multiplied. */
-            CCP5ECC_NUMBER  Factor2;
-        } FieldMultiplication;
+            CCP5ECCNUM              Factor2;
+        } FieldMul;
         /** Data for addition in a field. */
-        struct {
+        struct
+        {
             /** First summand to be added. */
-            CCP5ECC_NUMBER  Summand1;
+            CCP5ECCNUM              Summand1;
             /** Second summand to be added. */
-            CCP5ECC_NUMBER  Summand2;
-        } FieldAddition;
+            CCP5ECCNUM              Summand2;
+        } FieldAdd;
         /** Data for inversion in a field. */
-        struct {
+        struct
+        {
             /** Number to be inverted. */
-            CCP5ECC_NUMBER  Number;
-        } FieldInversion;
+            CCP5ECCNUM              Num;
+        } FieldInv;
         /** @todo Data for curve addition (layout unknown). */
-        struct {
+        struct
+        {
             /* unknown */
-        } CurveAddition;
+        } CurveAdd;
         /** Data for curve multiplication. */
-        struct {
+        struct
+        {
             /** Point on curve to be multiplied. */
-            CCP5ECC_POINT   Point;
+            CCP5ECCPT               Point;
             /** Unused number (set to zero). */
-            CCP5ECC_NUMBER  Zero;
+            CCP5ECCNUM              Zero;
             /**
              * Curve coefficient a.
              * @todo Why? And what do we do with this?
@@ -376,24 +409,26 @@ typedef struct CCP5ECC_DATA {
              *       (a and b) or only b when a is assumed
              *       to be -3.
              */
-            CCP5ECC_NUMBER  Coefficient;
+            CCP5ECCNUM              Coefficient;
             /** Factor by which to mutiply point. */
-            CCP5ECC_NUMBER  Factor;
-        } CurveMultiplication;
+            CCP5ECCNUM              Factor;
+        } CurveMul;
         /** @todo Data for curve doubling (layout unknown). */
-        struct {
+        struct
+        {
             /* unknown */
-        } CurveDoubling;
+        } CurveDouble;
         /** Data for curve addition and multiplication. */
-        struct {
+        struct
+        {
             /** First summand on curve to be scaled. */
-            CCP5ECC_POINT   Point1;
+            CCP5ECCPT               Point1;
             /** Factor by which to scale first summand. */
-            CCP5ECC_NUMBER  Factor1;
+            CCP5ECCNUM              Factor1;
             /** Second summand on curve to be scaled. */
-            CCP5ECC_POINT   Point2;
+            CCP5ECCPT               Point2;
             /** Factor by which to scale second summand. */
-            CCP5ECC_NUMBER  Factor2;
+            CCP5ECCNUM              Factor2;
             /**
              * Curve coefficient a.
              * @todo Why? And what do we do with this?
@@ -401,10 +436,15 @@ typedef struct CCP5ECC_DATA {
              *       (a and b) or only b when a is assumed
              *       to be -3.
              */
-            CCP5ECC_NUMBER  Coefficient;
-        } CurveMultiplicationAddition;
+            CCP5ECCNUM              Coefficient;
+        } CurveMulAdd;
     } Op;
-} CCP5ECC_DATA;
+} CCP5ECCREQ;
+/** Pointer to the ECC request data. */
+typedef CCP5ECCREQ *PCCP5ECCREQ;
+/** Pointer to a const ECC request data. */
+typedef const CCP5ECCREQ *PCCCP5ECCREQ;
+
 
 #endif /* !INCLUDED_psp_ccp_h */
 
