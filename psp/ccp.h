@@ -156,6 +156,28 @@
 #define CCP_V5_ENGINE_RSA_SZ_GET(a_Func)            (((a_Func) >> 3) & 0xfff)
 /** @} */
 
+/** @name ECC engine specific defines.
+ * @{ */
+/** Multiply two elements in a F_p field. */
+#define CCP_V5_ENGINE_ECC_OP_MUL_FIELD              0
+/** Add two elements in a F_p field. */
+#define CCP_V5_ENGINE_ECC_OP_ADD_FIELD              1
+/** Invert (multiplicative) an element in a F_p field. */
+#define CCP_V5_ENGINE_ECC_OP_INV_FIELD              2
+/** Maybe add two points on an elliptic curve? */
+#define CCP_V5_ENGINE_ECC_OP_ADD_CURVE              3
+/** Mutiply a point on an elliptic curve with an element in a F_p field. */
+#define CCP_V5_ENGINE_ECC_OP_MUL_CURVE              4
+/** Maybe double a point on an elliptic curve? */
+#define CCP_V5_ENGINE_ECC_OP_DOUBLE_CURVE           5
+/** Add multiples of two points on an elliptic curve. */
+#define CCP_V5_ENGINE_ECC_OP_MUL_ADD_CURVE          6
+/** Returns the ECC op. */
+#define CCP_V5_ENGINE_ECC_OP_GET(a_Func)            ((a_Func >> 12) & 0x7)
+/** Returns the lowest exponent such that a power of two is larger then the fields prime. */
+#define CCP_V5_ENGINE_ECC_BIT_COUNT_GET(a_Func)     (a_Func & 0xfff)
+/** @} */
+
 /** @name Available memory types.
  * @{ */
 /** System memory (DRAM). */
@@ -304,6 +326,85 @@ typedef struct CCP5REQ
 typedef CCP5REQ *PCCP5REQ;
 /** Pointer to a const request descriptor. */
 typedef const CCP5REQ *PCCCP5REQ;
+
+/** ECC request number. */
+typedef struct CCP5ECC_NUMBER { uint8_t bytes[0x48]; } CCP5ECC_NUMBER;
+/** ECC request point. */
+typedef struct CCP5ECC_POINT { CCP5ECC_NUMBER x; CCP5ECC_NUMBER y; } CCP5ECC_POINT;
+
+/**
+ * ECC request data.
+ */
+typedef struct CCP5ECC_DATA {
+    /** Prime-Modulus for the field on which the curve is defined. */
+    CCP5ECC_NUMBER          Prime;
+    /** ECC operation dependent data. */
+    union {
+        /** Data for multiplication in a field. */
+        struct {
+            /** First factor to be multiplied. */
+            CCP5ECC_NUMBER  Factor1;
+            /** Second factor to be multiplied. */
+            CCP5ECC_NUMBER  Factor2;
+        } FieldMultiplication;
+        /** Data for addition in a field. */
+        struct {
+            /** First summand to be added. */
+            CCP5ECC_NUMBER  Summand1;
+            /** Second summand to be added. */
+            CCP5ECC_NUMBER  Summand2;
+        } FieldAddition;
+        /** Data for inversion in a field. */
+        struct {
+            /** Number to be inverted. */
+            CCP5ECC_NUMBER  Number;
+        } FieldInversion;
+        /** @todo Data for curve addition (layout unknown). */
+        struct {
+            /* unknown */
+        } CurveAddition;
+        /** Data for curve multiplication. */
+        struct {
+            /** Point on curve to be multiplied. */
+            CCP5ECC_POINT   Point;
+            /** Unused number (set to zero). */
+            CCP5ECC_NUMBER  Zero;
+            /**
+             * Curve coefficient a.
+             * @todo Why? And what do we do with this?
+             *       You either need both coefficients
+             *       (a and b) or only b when a is assumed
+             *       to be -3.
+             */
+            CCP5ECC_NUMBER  Coefficient;
+            /** Factor by which to mutiply point. */
+            CCP5ECC_NUMBER  Factor;
+        } CurveMultiplication;
+        /** @todo Data for curve doubling (layout unknown). */
+        struct {
+            /* unknown */
+        } CurveDoubling;
+        /** Data for curve addition and multiplication. */
+        struct {
+            /** First summand on curve to be scaled. */
+            CCP5ECC_POINT   Point1;
+            /** Factor by which to scale first summand. */
+            CCP5ECC_NUMBER  Factor1;
+            /** Second summand on curve to be scaled. */
+            CCP5ECC_POINT   Point2;
+            /** Factor by which to scale second summand. */
+            CCP5ECC_NUMBER  Factor2;
+            /**
+             * Curve coefficient a.
+             * @todo Why? And what do we do with this?
+             *       You either need both coefficients
+             *       (a and b) or only b when a is assumed
+             *       to be -3.
+             */
+            CCP5ECC_NUMBER  Coefficient;
+        } CurveMultiplicationAddition;
+    } Op;
+} CCP5ECC_DATA;
 
 #endif /* !INCLUDED_psp_ccp_h */
 
