@@ -210,6 +210,26 @@
 #define CCP_V5_Q_REG_HEAD                           0x4
 /** Request queue tail register. */
 #define CCP_V5_Q_REG_TAIL                           0x8
+/** Interrupt enable register. */
+#define CCP_V5_Q_REG_IEN                            0xc
+/** Enable interrupt on completion. */
+# define CCP_V5_Q_REG_IEN_COMPLETION                BIT(0)
+/** Enable interrupt on error. */
+# define CCP_V5_Q_REG_IEN_ERROR                     BIT(1)
+/** Enable interrupt when the queue stops processing requests. */
+# define CCP_V5_Q_REG_IEN_Q_STOP                    BIT(2)
+/** Enable interrupt when the queue is empty. */
+# define CCP_V5_Q_REG_IEN_Q_EMPTY                   BIT(3)
+/** Interrupt status register. */
+#define CCP_V5_Q_REG_ISTS                           0x10
+/** A request completed. */
+# define CCP_V5_Q_REG_ISTS_COMPLETION               BIT(0)
+/** The queue ran into an error. */
+# define CCP_V5_Q_REG_ISTS_ERROR                    BIT(1)
+/** The queue stopped processing requests.. */
+# define CCP_V5_Q_REG_ISTS_Q_STOP                   BIT(2)
+/** The queue is empty. */
+# define CCP_V5_Q_REG_ISTS_Q_EMPTY                  BIT(3)
 /** Status register. */
 #define CCP_V5_Q_REG_STATUS                         0x100
 /** Status register success indicator. */
