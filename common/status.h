@@ -79,6 +79,8 @@
 #define STS_ERR_PSP_PROXY_REQ_COMPLETED_WITH_ERROR          (-2002)
 /** Request returned unexpected PDU payload size. */
 #define STS_ERR_PSP_PROXY_REQ_RESP_PAYLOAD_SZ_MISMATCH      (-2003)
+/** No interrupt level change happened during the given timeout. */
+#define STS_ERR_PSP_PROXY_WFI_NO_CHANGE                     (-2004)
 /** @} */
 
 
