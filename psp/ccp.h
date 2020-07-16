@@ -207,19 +207,19 @@
 /** The HALT bit, which indicates whether the queue is currently processing requests. */
 # define CCP_V5_Q_REG_CTRL_HALT                     BIT(1)
 /** Number of bits to shift right to get at the queue size order. */
-# define CCP_V5_Q_REG_CTRL_Q_SZ_SHIFT              3
+# define CCP_V5_Q_REG_CTRL_Q_SZ_SHIFT               3
 /** The mask to apply to extract the queue size order after shifting it. */
-# define CCP_V5_Q_REG_CTRL_Q_SZ_MASK               0x1f
+# define CCP_V5_Q_REG_CTRL_Q_SZ_MASK                0x1f
 /** Helper to get to the queue size order of the given control register value. */
-# define CCP_V5_Q_REG_CTRL_Q_SZ_GET_ORDER(a_Reg)   (((a_Reg) >> CCP_V5_Q_REG_CTRL_Q_SZ_SHIFT) & CCP_V5_Q_REG_CTRL_Q_SZ_MASK)
+# define CCP_V5_Q_REG_CTRL_Q_SZ_GET_ORDER(a_Reg)    (((a_Reg) >> CCP_V5_Q_REG_CTRL_Q_SZ_SHIFT) & CCP_V5_Q_REG_CTRL_Q_SZ_MASK)
 /** Helper to get to the number of entries in the queue from the given control register value. */
-# define CCP_V5_Q_REG_CTRL_Q_SZ_GET_ENTRIES(a_Reg) (1 << CCP_V5_Q_REG_CTRL_Q_SZ_GET_ORDER(a_Reg))
+# define CCP_V5_Q_REG_CTRL_Q_SZ_GET_ENTRIES(a_Reg)  (1 << CCP_V5_Q_REG_CTRL_Q_SZ_GET_ORDER(a_Reg))
 /** Helper to get to the queue size from the given control register value. */
-# define CCP_V5_Q_REG_CTRL_Q_SZ_GET_SIZE(a_Reg)    (CCP_V5_Q_REG_CTRL_Q_SZ_GET_ENTRIES(a_Reg) * sizeof(CCP5REQ))
-/** Request queue head register. */
-#define CCP_V5_Q_REG_HEAD                           0x4
+# define CCP_V5_Q_REG_CTRL_Q_SZ_GET_SIZE(a_Reg)     (CCP_V5_Q_REG_CTRL_Q_SZ_GET_ENTRIES(a_Reg) * sizeof(CCP5REQ))
 /** Request queue tail register. */
-#define CCP_V5_Q_REG_TAIL                           0x8
+#define CCP_V5_Q_REG_TAIL                           0x4
+/** Request queue head register. */
+#define CCP_V5_Q_REG_HEAD                           0x8
 /** Interrupt enable register. */
 #define CCP_V5_Q_REG_IEN                            0xc
 /** Enable interrupt on completion. */
