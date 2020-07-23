@@ -28,6 +28,9 @@
 
 #include <common/cdefs.h>
 
+#include <psp-fw/ffs.h>
+
+
 /**
  * Core Complex and core ID mapping for the CCD.
  */
@@ -54,8 +57,10 @@ typedef union PSPROMSVCPG
     /** Structured view. */
     struct
     {
-        /** 0x00-0x40f: The flash directory structure (@todo Complete). */
-        uint8_t                 abFfsDir[(64 * 16) + 16];
+        /** 0x00-0x0f: The flash directory header. */
+        PSPFFSDIRHDR            FfsDirHdr;
+        /** 0x10-0x40f: The flash directory entries. */
+        PSPFFSDIRENTRY          aFfsDirEntries[64];
         /** 0x410-0x64f: AMD public key. */
         uint8_t                 abAmdPubKey[576];
         /** 0x650-0xa13: Unknown. */
