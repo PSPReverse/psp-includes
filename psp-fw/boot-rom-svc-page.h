@@ -69,13 +69,13 @@ typedef union PSPROMSVCPG
         uint32_t                u32BootMode;
         /** 0xa18 - 0xa1d: Unknown. */
         uint8_t                 abUnknown1[6];
-        /** 0xa1e: physical Core count */
-        uint8_t                 cCores;
-        /** 0xa1f: physical Core Complex count */
+        /** 0xa1e: Number of physical x86 cores per CCX */
+        uint8_t                 cCoresPerCcx;
+        /** 0xa1f: Number of CCXs on die. */
         uint8_t                 cCcxs;
-        /** 0xa20: number of enabled Cores on Die */
-        uint8_t                 cCoresEnabledOnDie;
-        /** 0xa21: unknown */
+        /** 0xa20: Number of physical x86 cores on the CCD. */
+        uint8_t                 cCoresPerCcd;
+        /** 0xa21: Unknown. */
         uint8_t                 bUnknown2;
         /** 0xa22 - 0xa23: logical Cores per Complex */
         uint8_t                 logCoresPerComplex[2];
