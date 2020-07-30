@@ -26,7 +26,7 @@
 #ifndef INCLUDED_common_types_h
 #define INCLUDED_common_types_h
 
-#ifdef IN_PSP
+#if defined(IN_PSP) || defined(IN_X86_STUB)
 typedef unsigned char      uint8_t;
 typedef unsigned short     uint16_t;
 typedef unsigned int       uint32_t;
