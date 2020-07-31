@@ -43,6 +43,10 @@ typedef enum X86STUBMBXREQ
     X86STUBMBXREQ_IOPORT_READ,
     /** Write to the given I/O port. */
     X86STUBMBXREQ_IOPORT_WRITE,
+    /** Read from the given 32bit physical memory address. */
+    X86STUBMBXREQ_MEM32_READ,
+    /** Write to the given 32bit physical memory address. */
+    X86STUBMBXREQ_MEM32_WRITE,
     /** 32bit hack. */
     X86STUBMBXREQ_32BIT_HACK = 0x7fffffff
 } X86STUBMBXREQ;
@@ -54,9 +58,9 @@ typedef enum X86STUBMBXREQ
 typedef struct X86STUBMBX
 {
     /** Magic to indicate availability of a new request or readiness to accept a new command. */
-    volatile uint32_t           u32MagicReqResp;
+    uint32_t           u32MagicReqResp;
     /** The request to perform. */
-    X86STUBMBXREQ               enmReq;
+    X86STUBMBXREQ      enmReq;
     /** Request dependent data. */
     union
     {
@@ -70,6 +74,16 @@ typedef struct X86STUBMBX
             /** The data to write or the data being read upon completion. */
             uint32_t            u32Val;
         } IoPort;
+        /** 32bit memory access. */
+        struct
+        {
+            /** The address to access. */
+            uint32_t            u32MemAddr;
+            /** Access size (1, 2 or 4 bytes). */
+            uint32_t            cbAccess;
+            /** The data to write or the data being read upon completion. */
+            uint32_t            u32Val;
+        } Mem32;
     } u;
 } X86STUBMBX;
 /** Pointer to the x86 mailbox. */
