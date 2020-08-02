@@ -47,6 +47,10 @@ typedef enum X86STUBMBXREQ
     X86STUBMBXREQ_MEM32_READ,
     /** Write to the given 32bit physical memory address. */
     X86STUBMBXREQ_MEM32_WRITE,
+    /** Read from the given MSR. */
+    X86STUBMBXREQ_MSR_READ,
+    /** Write to the given MSR. */
+    X86STUBMBXREQ_MSR_WRITE,
     /** 32bit hack. */
     X86STUBMBXREQ_32BIT_HACK = 0x7fffffff
 } X86STUBMBXREQ;
@@ -84,6 +88,16 @@ typedef struct X86STUBMBX
             /** The data to write or the data being read upon completion. */
             uint32_t            u32Val;
         } Mem32;
+        /** MSR access. */
+        struct
+        {
+            /** The MSR to access. */
+            uint32_t            idMsr;
+            /** The key to put into EDI ((was?) required on some AMD CPUs for certain MSRs). */
+            uint32_t            idKey;
+            /** The value to write or the value being read upon completion. */
+            uint64_t            u64Val;
+        } Msr;
     } u;
 } X86STUBMBX;
 /** Pointer to the x86 mailbox. */
