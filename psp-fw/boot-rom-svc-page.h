@@ -28,10 +28,22 @@
 
 #include <common/cdefs.h>
 
-typedef struct {
-    uint8_t coreComplexId;
-    uint8_t coreId;
-} coreInfo;
+#include <psp-fw/ffs.h>
+
+
+/**
+ * Core Complex and core ID mapping for the CCD.
+ */
+#pragma pack(1)
+typedef struct PSPCOREINFO
+{
+    /** Core Complex ID. */
+    uint8_t                     idCcx;
+    /** Core ID. */
+    uint8_t                     idCore;
+} PSPCOREINFO;
+#pragma pack()
+
 
 /**
  * The boot ROM service page structure as known, residing at 0x3f000.
@@ -43,9 +55,12 @@ typedef union PSPROMSVCPG
     /** Byte view. */
     uint8_t                     ab[_4K];
     /** Structured view. */
-    struct BRSPFields {
-        /** 0x00-0x40f: The flash directory structure (@todo Complete). */
-        uint8_t                 abFfsDir[(64 * 16) + 16];
+    struct
+    {
+        /** 0x00-0x0f: The flash directory header. */
+        PSPFFSDIRHDR            FfsDirHdr;
+        /** 0x10-0x40f: The flash directory entries. */
+        PSPFFSDIRENTRY          aFfsDirEntries[64];
         /** 0x410-0x64f: AMD public key. */
         uint8_t                 abAmdPubKey[576];
         /** 0x650-0xa13: Unknown. */
@@ -53,21 +68,21 @@ typedef union PSPROMSVCPG
         /** 0xa14: Boot mode (everything < 2 means signature checks disabled, 2 is 'secure'). */
         uint32_t                u32BootMode;
         /** 0xa18 - 0xa1d: Unknown. */
-        uint8_t                 unknown1[6];
-        /** 0xa1e: physical Core count */
-        uint8_t                 coreCount;
-        /** 0xa1f: physical Core Complex count */
-        uint8_t                 complexCount;
-        /** 0xa20: number of enabled Cores on Die */
-        uint8_t                 enabledCoreCountOnDie;
-        /** 0xa21: unknown */
-        uint8_t                 unknown2;
+        uint8_t                 abUnknown1[6];
+        /** 0xa1e: Number of physical x86 cores per CCX */
+        uint8_t                 cCoresPerCcx;
+        /** 0xa1f: Number of CCXs on die. */
+        uint8_t                 cCcxs;
+        /** 0xa20: Number of physical x86 cores on the CCD. */
+        uint8_t                 cCoresPerCcd;
+        /** 0xa21: Unknown. */
+        uint8_t                 bUnknown2;
         /** 0xa22 - 0xa23: logical Cores per Complex */
         uint8_t                 logCoresPerComplex[2];
         /** 0xa24 - 0xa43: coreinfo structs - only seen access to the first 8 so far */
-        struct coreInfo         coreInfoMap[16];
+        PSPCOREINFO             aCoreInfo[16];
         /** 0xa44 - 0xa4f: unknown */
-        uint8_t                 abUnknown1[12];
+        uint8_t                 abUnknown3[12];
         /** 0xa50: Physical die ID of the PSP. */
         uint8_t                 idPhysDie;
         /** 0xa51: Socket ID. */
@@ -77,12 +92,12 @@ typedef union PSPROMSVCPG
         /** 0xa53: System socket count. */
         uint8_t                 cSysSockets;
         /** 0xa54: Unknown. */
-        uint8_t                 bUnk0;
+        uint8_t                 bUnk4;
         /** 0xa55: Number of dies per socket. */
         uint8_t                 cDiesPerSocket;
         /** 0xa56 - 0xfff: unknown */
-        uint8_t                 unknown3[1450];
-    };
+        uint8_t                 abUnknown5[1450];
+    } Fields;
 } PSPROMSVCPG;
 #pragma pack()
 /** Pointer to a boot ROM service page. */

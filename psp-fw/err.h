@@ -129,6 +129,7 @@ typedef enum PSPSTATUS
     PSPSTATUS_MCM_STEADY_STATE_UNIT_TEST_FAILED                        = 0x5a,
     PSPSTATUS_S3_ENTER_FAILED                                          = 0x5b,
     PSPSTATUS_AGESA_BL_FAILED_TO_SET_PSP_SMU_RSVD_ADDRESS_VIA_SVC_CALL = 0x5c,
+    PSPSTATUS_UNUSED_5dh                                               = 0x5d,
     PSPSTATUS_CCX_SEC_BISI_EM_NOT_SET_IN_FUSE_RAM                      = 0x5e,
     PSPSTATUS_UNEXPECTED_RESULT_RECEIVED                               = 0x5f,
     PSPSTATUS_VMG_STOR_INIT_FAILED                                     = 0x60,
@@ -356,6 +357,7 @@ typedef enum PSPSTATUS
     "PSPSTATUS_MCM_STEADY_STATE_UNIT_TEST_FAILED",                        \
     "PSPSTATUS_S3_ENTER_FAILED",                                          \
     "PSPSTATUS_AGESA_BL_FAILED_TO_SET_PSP_SMU_RSVD_ADDRESS_VIA_SVC_CALL", \
+    "PSPSTATUS_UNUSED_5dh",                                               \
     "PSPSTATUS_CCX_SEC_BISI_EM_NOT_SET_IN_FUSE_RAM",                      \
     "PSPSTATUS_UNEXPECTED_RESULT_RECEIVED",                               \
     "PSPSTATUS_VMG_STOR_INIT_FAILED",                                     \
